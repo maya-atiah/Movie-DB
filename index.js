@@ -54,20 +54,45 @@ const movies = [
 //url movies/create
 app.get('/movies/add', (req, res) => { })
 
-//url movies/read
-app.get("/movies/get", (req, res) => { 
-    res.json({status:200, data: movies })
-    
+//url movies/read step5
+app.get("/movies/get", (req, res) => {
+    res.json({ status: 200, data: movies })
+
 });
 
 //url movies/update 
-app.get('/movies/edit', (req,res) => { })
+app.get('/movies/edit', (req, res) => { })
 
 //url movies/delete
 app.get('/movies/delete', (req, res) => { })
 
 
+//url /movies/read/by-date step 6
+app.get('/movies/read/by-date', (req, res) => {
+    movies.sort(function (a, b) { return a.year - b.year });
+    res.json({ status: 200, data: movies })
+})
 
+//url /movies/read/by-title step 6
+app.get('/movies/read/by-title', (req, res) => {
+    movies.sort(function (a, b) {
+        if (a.title < b.title) {
+            return -1;
+        }
+        if (a.title > b.title) {
+            return 1;
+        }
+        return 0;
+    });
+    res.json({ status: 200, data: movies })
+})
+
+
+//url /movies/read/by-rating step 6
+app.get('/movies/read/by-rating', (req, res) => {
+    movies.sort(function (a, b) { return a.rating- b.rating});
+    res.json({ status: 200, data: movies })
+})
 
 
 
