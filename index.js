@@ -42,8 +42,38 @@ app.get('/search', (req, res) => {
 })
 
 
-app.listen(3000, () => {
-    console.log("Example app listening on 3000...")
+//array of movies
+const movies = [
+    { title: 'Jaws', year: 1975, rating: 8 },
+    { title: 'Avatar', year: 2009, rating: 7.8 },
+    { title: 'Brazil', year: 1985, rating: 8 },
+    { title: 'الإرهاب والكباب‎', year: 1992, rating: 6.2 }
+];
+
+
+//url movies/create
+app.get('/movies/add', (req, res) => { })
+
+//url movies/read
+app.get("/movies/get", (req, res) => { 
+    res.json({status:200, data: movies })
+    
+});
+
+//url movies/update 
+app.get('/movies/edit', (req, res) => { })
+
+//url movies/delete
+app.get('/movies/delete', (req, res) => { })
+
+
+
+
+
+
+
+app.listen(2000, () => {
+    console.log("Example app listening on 2000...")
 })
 
 //const port=process.env.PORT || 3000
