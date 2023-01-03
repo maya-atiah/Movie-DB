@@ -37,7 +37,7 @@ app.get('/search', (req, res) => {
         res.send({ status: 200, message: "ok", data: search })
     }
     else {
-        res.send({ status: 500, error: true, message: "you have to provide a search" })
+        res.send({ status: 500, error: true, message: "you have t provide a search" })
     }
 })
 
@@ -61,7 +61,7 @@ app.get("/movies/get", (req, res) => {
 });
 
 //url movies/update 
-app.get('/movies/edit', (req, res) => { })
+app.get('/movies/edit', (req,res) => { })
 
 //url movies/delete
 app.get('/movies/delete', (req, res) => { })
