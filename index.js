@@ -115,12 +115,7 @@ app.get('/movies/edit', (req, res) => { })
 //url movies/delete
 app.get("/movies/delete/:id", (req, res) => {
     const number = req.params.id;
-    if (number == movies.length) {
-        movies.pop();
-        res.json({ status: 200, message: movies })
-    }
-
-    else if (number < movies.length) {
+     if (number <= movies.length) {
         movies.splice(number - 1, 1);
         res.json({ status: 200, message: movies })
     }
