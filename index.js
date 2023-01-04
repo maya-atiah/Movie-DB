@@ -62,7 +62,7 @@ const movies = [
 
 
 //url movies/create step 8
-app.get('/movie/add', (req, res) => {
+app.get('/movies/add', (req, res) => {
     const title = req.query.title;
     const year = req.query.year;
     const rating = req.query.rating;
@@ -118,10 +118,23 @@ app.get('/movies/edit', (req, res) => { })
 
 
 
-
 //url movies/delete
-app.get('/movies/delete', (req, res) => { })
+app.get("/movies/delete/:id", (req, res) => {
+    const number =req.params.id;
+    if (number== movies.length) {
+        movies.pop();
+        res.json({ status: 200, message: movies })
+    }
 
+    else if (number < movies.length) {
+        movies.splice(number- 1, 1);
+        res.json({ status: 200, message: movies })
+    }
+    else res.status(404).send({
+        status: 404, error: true, message: "the movie id does not exist",
+    });
+
+})
 
 
 
