@@ -95,7 +95,19 @@ app.get('/movies/read/by-rating', (req, res) => {
 })
 
 
+//url /movies/read/id/<ID> step 7
+app.get('/movies/read/id/:id', (res, req) => {
+    const ID =req.params.id;
+  if (ID>0 && ID<=movies.length) {
+         
+   
+            res.json({ status: 200, data: movies[ID-1] });
+          
+        }
+        else res.json({ status: 404, error: true, message: 'the movie' +ID + 'does not exist' }) 
+    }
 
+)
 
 app.listen(2000, () => {
     console.log("Example app listening on 2000...")
@@ -104,3 +116,9 @@ app.listen(2000, () => {
 //const port=process.env.PORT || 3000
 //app.listen(port,()=>console.log(`listen ${port}`))
 //export Port=5000
+
+// app.get('/movies/read/id/:ID', (res,req)=>{
+//     const moviesId= movies.find(c => c.id ===parseInt(req.params.id))
+//      if(!moviesId) res.status(404).send({status:404, error:true, message:'the movie <ID> does not exist'})
+//      else res.send(moviesId)
+//  })
