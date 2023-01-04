@@ -70,19 +70,13 @@ app.get('/movies/add', (req, res) => {
         res.status(403).send({ status: 403, error: true, message: 'you cannot create a movie without providing a title and a year' });
 
     }
-    
+
     else if (!rating) {
-        res.send({
-            title: title,
-            year: year,
-            rating: 4
+        res.send({ title: title,year: year,rating: 4
         })
     }
     else {
-       const  movie = {
-            title: title,
-            year: year,
-            rating: rating,
+        const movie = {title: title, year: year, rating: rating,
         };
         movies.push(movie);
         res.send({ status: 200, message: movies });
@@ -120,14 +114,14 @@ app.get('/movies/edit', (req, res) => { })
 
 //url movies/delete
 app.get("/movies/delete/:id", (req, res) => {
-    const number =req.params.id;
-    if (number== movies.length) {
+    const number = req.params.id;
+    if (number == movies.length) {
         movies.pop();
         res.json({ status: 200, message: movies })
     }
 
     else if (number < movies.length) {
-        movies.splice(number- 1, 1);
+        movies.splice(number - 1, 1);
         res.json({ status: 200, message: movies })
     }
     else res.status(404).send({
@@ -166,7 +160,7 @@ app.get('/movies/read/by-title', (req, res) => {
 
 //url /movies/read/by-rating step 6
 app.get('/movies/read/by-rating', (req, res) => {
-    movies.sort(function (a, b) { return a.rating- b.rating});
+    movies.sort(function (a, b) { return a.rating - b.rating });
     res.json({ status: 200, data: movies })
 })
 
@@ -176,15 +170,15 @@ app.get('/movies/read/by-rating', (req, res) => {
 
 //url /movies/read/id/<ID> step 7
 app.get('/movies/read/id/:id', (res, req) => {
-    const ID =req.params.id;
-  if (ID>0 && ID<=movies.length) {
-         
-   
-            res.json({ status: 200, data: movies[ID-1] });
-          
-        }
-        else res.json({ status: 404, error: true, message: 'the movie' +ID + 'does not exist' }) 
+    const ID = req.params.id;
+    if (ID > 0 && ID <= movies.length) {
+
+
+        res.json({ status: 200, data: movies[ID - 1] });
+
     }
+    else res.json({ status: 404, error: true, message: 'the movie' + ID + 'does not exist' })
+}
 
 )
 
