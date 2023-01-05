@@ -108,7 +108,63 @@ app.get("/movies/get", (req, res) => {
 
 
 //url movies/update 
-app.get('/movies/edit', (req, res) => { })
+app.get('/movies/edit/:id', (req, res) => {
+    const num= req.params.id;
+    const title= req.query.title;
+    const year= req.query.year;
+    const rating=req.query.rating;
+    if(num<=movies.length){
+        if(!title){
+            if(!year){
+                movies[num-1].rating=rating;
+                res.json({status:200, data:movies});
+            }
+            else if(!rating && year.length==4){
+                movies[num-1].year=year;
+                res.json({status:200, data:movies});
+            }
+            else{
+                movies[num-1].year=year;
+                movies[num-1].rating=rating;
+                res.json({status:200, data:movies});
+            }
+        }
+        else if(!year){
+            if(!title){
+            movies[num-1].rating=rating;
+            }
+            else if(!rating){
+                movies[num-1].title=title;
+                res.json({status:200, data:movies});
+            }
+            else{
+                movies[num-1].title=title;
+                movies[num-1].rating=rating;
+                res.json({status:200, data:movies});
+            }}
+        else if(!rating){
+             if(!title && year.length==4){
+                movies[num-1].year=year;
+                res.json({status:200, data:movies});
+             }
+             else if(!year){
+                movies[num-1].title=title;
+                res.json({status:200, data:movies});
+             }
+             else{
+                movies[num-1].title=title;
+                movies[num-1].year=year;
+                res.json({status:200, data:movies});
+             }
+        }
+        else{
+            movies[num-1].title=title;
+            movies[num-1].year=year;
+            movies[num-1].rating=rating;
+            res.json({status:200, data:movies});
+        }
+    }else res.send({status:404, error:true, message:'the movie '+num+' does not exist'})
+ })
 
 
 
@@ -167,14 +223,10 @@ app.get('/movies/read/by-rating', (req, res) => {
 app.get('/movies/read/id/:id', (res, req) => {
     const ID = req.params.id;
     if (ID > 0 && ID <= movies.length) {
-
-
         res.json({ status: 200, data: movies[ID - 1] });
-
     }
     else res.json({ status: 404, error: true, message: 'the movie' + ID + 'does not exist' })
 }
-
 )
 
 
@@ -194,3 +246,7 @@ app.listen(2000, () => {
 //      if(!moviesId) res.status(404).send({status:404, error:true, message:'the movie <ID> does not exist'})
 //      else res.send(moviesId)
 //  })
+
+app.get('/movies/update/:id',(req,res)=>{
+    
+})
