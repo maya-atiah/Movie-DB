@@ -1,6 +1,8 @@
+// const Joi=require('joi');
 const express = require('express');
 const app = express();
 
+app.use(express.json());
 
 //const for time
 const today = new Date();
@@ -60,40 +62,30 @@ const movies = [
 
 
 
+//url step11 HTTP Verbs post
+app.post('/movies/create', (req, res) => {
 
-//url movies/create step 8
-app.get('/movies/add', (req, res) => {
-    const title = req.query.title;
-    const year = req.query.year;
-    const rating = req.query.rating;
-    if (!title || !year || year.length > 4 || year.length < 4) {
+
+    const title = req.body.title;
+    const year = req.body.year;
+    const rating = req.body.rating;
+
+    if (!title || !year || year.toString().length > 4 || year.toString().length < 4) {
         res.status(403).send({ status: 403, error: true, message: 'you cannot create a movie without providing a title and a year' });
-
     }
-
     else if (!rating) {
-        res.send({ title: title,year: year,rating: 4
+        res.send({
+            title: title, year: year, rating: 4
         })
     }
     else {
-        const movie = {title: title, year: year, rating: rating,
+        const movie = {
+            title: title, year: year, rating: rating
         };
         movies.push(movie);
         res.send({ status: 200, message: movies });
     }
-})
-
-
-
-// app.post('/movies/add', (req, res) => {
-//     const movie = {
-//         title: req.body.title,
-//         year: req.body.year,
-//         rating: req.body.rating
-//     }
-//     movies.push(movie);
-//     res.send(movie);
-// });
+});
 
 
 
@@ -108,70 +100,72 @@ app.get("/movies/get", (req, res) => {
 
 
 //url movies/update 
-app.get('/movies/edit/:id', (req, res) => {
-    const num= req.params.id;
-    const title= req.query.title;
-    const year= req.query.year;
-    const rating=req.query.rating;
-    if(num<=movies.length){
-        if(!title){
-            if(!year){
-                movies[num-1].rating=rating;
-                res.json({status:200, data:movies});
+//url movie/edit  HTTP VERBS STEP 11
+app.put('/movies/edit/:id', (req, res) => {
+    const num = req.params.id;
+    const title = req.body.title;
+    const year = req.body.year;
+    const rating = req.body.rating;
+    if (num <= movies.length) {
+        if (!title) {
+            if (!year) {
+                movies[num - 1].rating = rating;
+                res.json({ status: 200, data: movies });
             }
-            else if(!rating && year.length==4){
-                movies[num-1].year=year;
-                res.json({status:200, data:movies});
+            else if (!rating && year.length == 4) {
+                movies[num - 1].year = year;
+                res.json({ status: 200, data: movies });
             }
-            else{
-                movies[num-1].year=year;
-                movies[num-1].rating=rating;
-                res.json({status:200, data:movies});
+            else {
+                movies[num - 1].year = year;
+                movies[num - 1].rating = rating;
+                res.json({ status: 200, data: movies });
             }
         }
-        else if(!year){
-            if(!title){
-            movies[num-1].rating=rating;
+        else if (!year) {
+            if (!title) {
+                movies[num - 1].rating = rating;
             }
-            else if(!rating){
-                movies[num-1].title=title;
-                res.json({status:200, data:movies});
+            else if (!rating) {
+                movies[num - 1].title = title;
+                res.json({ status: 200, data: movies });
             }
-            else{
-                movies[num-1].title=title;
-                movies[num-1].rating=rating;
-                res.json({status:200, data:movies});
-            }}
-        else if(!rating){
-             if(!title && year.length==4){
-                movies[num-1].year=year;
-                res.json({status:200, data:movies});
-             }
-             else if(!year){
-                movies[num-1].title=title;
-                res.json({status:200, data:movies});
-             }
-             else{
-                movies[num-1].title=title;
-                movies[num-1].year=year;
-                res.json({status:200, data:movies});
-             }
+            else {
+                movies[num - 1].title = title;
+                movies[num - 1].rating = rating;
+                res.json({ status: 200, data: movies });
+            }
         }
-        else{
-            movies[num-1].title=title;
-            movies[num-1].year=year;
-            movies[num-1].rating=rating;
-            res.json({status:200, data:movies});
+        else if (!rating) {
+            if (!title && year.length == 4) {
+                movies[num - 1].year = year;
+                res.json({ status: 200, data: movies });
+            }
+            else if (!year) {
+                movies[num - 1].title = title;
+                res.json({ status: 200, data: movies });
+            }
+            else {
+                movies[num - 1].title = title;
+                movies[num - 1].year = year;
+                res.json({ status: 200, data: movies });
+            }
         }
-    }else res.send({status:404, error:true, message:'the movie '+num+' does not exist'})
- })
+        else {
+            movies[num - 1].title = title;
+            movies[num - 1].year = year;
+            movies[num - 1].rating = rating;
+            res.json({ status: 200, data: movies });
+        }
+    } else res.send({ status: 404, error: true, message: 'the movie ' + num + ' does not exist' })
+})
 
 
 
 //url movies/delete
-app.get("/movies/delete/:id", (req, res) => {
+app.delete("/movies/delete/:id", (req, res) => {
     const number = req.params.id;
-     if (number <= movies.length) {
+    if (number <= movies.length) {
         movies.splice(number - 1, 1);
         res.json({ status: 200, message: movies })
     }
@@ -207,16 +201,11 @@ app.get('/movies/read/by-title', (req, res) => {
 
 
 
-
-
 //url /movies/read/by-rating step 6
 app.get('/movies/read/by-rating', (req, res) => {
     movies.sort(function (a, b) { return a.rating - b.rating });
     res.json({ status: 200, data: movies })
 })
-
-
-
 
 
 //url /movies/read/id/<ID> step 7
@@ -231,15 +220,42 @@ app.get('/movies/read/id/:id', (res, req) => {
 
 
 
-
-
 app.listen(2000, () => {
     console.log("Example app listening on 2000...")
 })
 
+
+
+
+
+
+
+//url movies/create step 8
+// app.get('/movies/add', (req, res) => {
+//     const title = req.query.title;
+//     const year = req.query.year;
+//     const rating = req.query.rating;
+//     if (!title || !year || year.length > 4 || year.length < 4) {
+//         res.status(403).send({ status: 403, error: true, message: 'you cannot create a movie without providing a title and a year' });
+//     }
+//     else if (!rating) {
+//         res.send({ title: title,year: year,rating: 4
+//         })
+//     }
+//     else {
+//         const movie = {title: title, year: year, rating: rating,
+//         };
+//         movies.push(movie);
+//         res.send({ status: 200, message: movies });
+//     }
+// })
+
+
+
 //const port=process.env.PORT || 3000
 //app.listen(port,()=>console.log(`listen ${port}`))
 //export Port=5000
+
 
 // app.get('/movies/read/id/:ID', (res,req)=>{
 //     const moviesId= movies.find(c => c.id ===parseInt(req.params.id))
@@ -247,6 +263,10 @@ app.listen(2000, () => {
 //      else res.send(moviesId)
 //  })
 
-app.get('/movies/update/:id',(req,res)=>{
-    
-})
+
+// app.put('/movie/update/:id',(req,res)=>{
+//     //look up the course
+//     //if not existing return 404
+//   const moviesId= movies.find(c => c.id ===parseInt(req.params.id))
+//   if(!moviesId) res.status(404).send({status:404, error:true, message:'the movie <ID> does not exist'})
+// })
