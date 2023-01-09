@@ -1,8 +1,30 @@
 // const Joi=require('joi');
-const express = require('express');
-const app = express();
 
+const express = require('express');
+
+
+//init app & middleware
+const app = express();
 app.use(express.json());
+
+module.exports = app;
+const blogRouter = require("./moviesdoc/movieRoutes");
+app.use("/api/blogs", blogRouter);
+const mongoose = require('mongoose');
+mongoose.connect('mongodb+srv://maya-test:test@test.zvc5zyu.mongodb.net/?retryWrites=true&w=majority/movies', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+    .then(() => {
+        console.log('Mongodb connected...');
+    })
+
+  
+app.listen(2000, () => {
+    console.log("Example app listening on 2000...")
+})
+
+
 
 //const for time
 const today = new Date();
@@ -66,6 +88,7 @@ const movies = [
 app.post('/movies/create', (req, res) => {
 
 
+
     const title = req.body.title;
     const year = req.body.year;
     const rating = req.body.rating;
@@ -82,7 +105,10 @@ app.post('/movies/create', (req, res) => {
         const movie = {
             title: title, year: year, rating: rating
         };
-        movies.push(movie);
+        // movies.push(movie); 
+
+        db.collection('testData').insertOne(movie);
+
         res.send({ status: 200, message: movies });
     }
 });
@@ -93,9 +119,12 @@ app.post('/movies/create', (req, res) => {
 
 //url movies/read step5
 app.get("/movies/get", (req, res) => {
+    db.collection('movies')
+        .find()//cursor toArray forEach
     res.json({ status: 200, data: movies })
 
 });
+
 
 
 
@@ -162,6 +191,7 @@ app.put('/movies/edit/:id', (req, res) => {
 
 
 
+
 //url movies/delete
 app.delete("/movies/delete/:id", (req, res) => {
     const number = req.params.id;
@@ -220,9 +250,6 @@ app.get('/movies/read/id/:id', (res, req) => {
 
 
 
-app.listen(2000, () => {
-    console.log("Example app listening on 2000...")
-})
 
 
 
